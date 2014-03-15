@@ -14,10 +14,10 @@ new Handle:g_hBlockPunchRock = INVALID_HANDLE;
 
 public Plugin:myinfo = 
 {
-	name = "Tank Attack Control",
+	name = "Tank Attack Control", 
 	author = "vintik, CanadaRox",
 	description = "",
-	version = "0.4",
+	version = "0.5", //0.4-0.5 just changes which rock is on which button.
 	url = "https://github.com/CanadaRox/sm_plugins"
 }
 
@@ -31,7 +31,7 @@ public OnPluginStart()
 	}
 	
 	//future-proof remake of the confogl feature (could be used with lgofnoc)
-	g_hBlockPunchRock = CreateConVar("l4d2_block_punch_rock", "0", "Block tanks from punching and throwing a rock at the same time");
+	g_hBlockPunchRock = CreateConVar("l4d2_block_punch_rock", "1", "Block tanks from punching and throwing a rock at the same time");
 
 	HookEvent("tank_spawn", TankSpawn_Event);
 }
@@ -51,8 +51,8 @@ public TankSpawn_Event(Handle:event, const String:name[], bool:dontBroadcast)
 	{
 		PrintToChat(tank, "[SM] Rock Selector");
 		PrintToChat(tank, "Use -> Underhand throw");
-		PrintToChat(tank, "Reload -> One hand overhand");
-		PrintToChat(tank, "Melee -> Two hand overhand");
+		PrintToChat(tank, "Melee -> One hand overhand");
+		PrintToChat(tank, "Reload -> Two hand overhand");
 	}
 }
 
@@ -64,7 +64,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 	//if tank
 	if (buttons & IN_RELOAD)
 	{
-		g_iQueuedThrow[client] = 1;
+		g_iQueuedThrow[client] = 3;
 		buttons |= IN_ATTACK2;
 	}
 	else if (buttons & IN_USE)
@@ -74,7 +74,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 	}
 	else
 	{
-		g_iQueuedThrow[client] = 3;
+		g_iQueuedThrow[client] = 1;
 	}
 	return Plugin_Continue;
 }
